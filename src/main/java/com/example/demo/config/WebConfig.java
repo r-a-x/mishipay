@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.interceptor.RequestDebugInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.Collections;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -34,6 +37,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean(name = "shopifyRestTemplate")
     public RestTemplate shopifyRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory){
-            return new RestTemplate(clientHttpRequestFactory);
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+        restTemplate.setInterceptors(Collections.singletonList(new RequestDebugInterceptor()));
+        return restTemplate;
+
     }
 }

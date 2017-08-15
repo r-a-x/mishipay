@@ -2,11 +2,12 @@ package com.example.demo.models;
 
 
 import com.example.demo.dto.UserDto;
+import com.example.demo.request.Address;
 import com.example.demo.util.Password;
-import com.mongodb.BasicDBList;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -14,12 +15,13 @@ public class User {
     @Id
     private String id;
 
+    private String uid;
     private String firstName;
     private String lastName;
     private String email;
     private String phone ;
     private Boolean verifiedEmail;
-    private BasicDBList address;
+    private List<Address> address;
     private String encryptedPassword;
     private Boolean sendEmailWelcome;
     private String accessToken;
@@ -30,17 +32,24 @@ public class User {
 
     }
 
-    public User(String email, String name, String password) {
+    public User(String uid, String firstName, String lastName, String email, String phone, Boolean verifiedEmail, List<Address> address, String encryptedPassword, Boolean sendEmailWelcome) {
+        this.uid = uid;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.name = name;
-        this.encryptedPassword = Password.encrypt(password);
+        this.phone = phone;
+        this.verifiedEmail = verifiedEmail;
+        this.address = address;
+        this.encryptedPassword = Password.encrypt(encryptedPassword);
+        this.sendEmailWelcome = sendEmailWelcome;
         this.accessToken = UUID.randomUUID().toString();
         this.createdOn = new Date();
         this.modifiedOn = new Date();
     }
 
+
     public UserDto toDto() {
-        return new UserDto(id, email, name, createdOn);
+        return new UserDto(id, email, firstName, createdOn,accessToken);
     }
 
     public String getId() {
@@ -59,12 +68,45 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getVerifiedEmail() {
+        return verifiedEmail;
+    }
+
+    public void setVerifiedEmail(Boolean verifiedEmail) {
+        this.verifiedEmail = verifiedEmail;
+    }
+
+
+    public Boolean getSendEmailWelcome() {
+        return sendEmailWelcome;
+    }
+
+    public void setSendEmailWelcome(Boolean sendEmailWelcome) {
+        this.sendEmailWelcome = sendEmailWelcome;
     }
 
     public String getEncryptedPassword() {
@@ -101,5 +143,13 @@ public class User {
 
     public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = modifiedOn;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

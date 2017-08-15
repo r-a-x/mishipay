@@ -5,19 +5,30 @@ import com.example.demo.dto.UserLoginDto;
 import com.example.demo.exception.*;
 import com.example.demo.models.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.request.CustomerCreationRequest;
 import com.example.demo.request.UserCreationRequest;
 import com.example.demo.request.UserLoginRequest;
+import com.example.demo.respose.CustomerCreateResponse;
 import com.example.demo.util.Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private RestTemplate shopifyRestTemplate;
+
+    private final String CUSTOMERS = "customers.json";
+
+    @Value("${shopifyHostUrl}")
+    private String shopifyHostUrl;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, @Qualifier("shopifyRestTemplate") RestTemplate shopifyRestTemplate) {
@@ -32,8 +43,20 @@ public class UserServiceImpl implements UserService {
             throw new UserEmailExistsException(userCreationRequest.getEmail());
         }
 
+        CustomerCreationRequest customerCreationRequest = new CustomerCreationRequest(userCreationRequest);
+        String id = createCustomer(customerCreationRequest);
 
-        User user = new User(userCreationRequest.getEmail(), userCreationRequest.getName(), userCreationRequest.getPassword());
+        User user = new User( id, userCreationRequest.getFirst_name(),
+                              userCreationRequest.getLast_name(),
+                userCreationRequest.getEmail(),
+                userCreationRequest.getPhone(),
+                userCreationRequest.getVerified_email(),
+                userCreationRequest.getAddresses(),
+//                null,
+                userCreationRequest.getPassword(),
+                userCreationRequest.getSend_email_welcome()
+        );
+
         user = userRepository.save(user);
 
         return user.toDto();
@@ -91,7 +114,17 @@ public class UserServiceImpl implements UserService {
         return user.toDto();
     }
 
-    private createCustomer(){}
+//  There would be certain data at this point to signinfy, the presence of something
+
+    private  String createCustomer(CustomerCreationRequest customerCreationRequest){
+
+        URI targetUrl = UriComponentsBuilder.fromHttpUrl(shopifyHostUrl).
+                path(CUSTOMERS).
+                build().toUri();
+
+        CustomerCreateResponse response = shopifyRestTemplate.postForObject(targetUrl,customerCreationRequest, CustomerCreateResponse.class);
+        return response.getCustomerResponse().getId();
+    }
 
 
 }

@@ -1,33 +1,46 @@
 package com.example.demo.request;
 
-import com.mongodb.BasicDBList;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by rahulb on 13/8/17.
  */
-public class UserCreationRequest {
+public class UserCreationRequest implements Serializable {
 
     private String first_name;
     private String last_name;
     private String email;
     private String phone ;
     private Boolean verified_email;
-    private Map<String,String> addresses;
+    private List<Address> addresses;
     private String password;
     private String password_confirmation;
     private Boolean send_email_welcome;
 
-    public UserCreationRequest(String first_name, String last_name, String email, String phone, Boolean verified_email, BasicDBList address, String password, String password_confirmation, Boolean send_email_welcome) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
-        this.phone = phone;
-        this.verified_email = verified_email;
-        this.address = address;
-        this.password = password;
-        this.password_confirmation = password_confirmation;
-        this.send_email_welcome = send_email_welcome;
-    }
+//
+//    public UserCreationRequest(String first_name, String last_name, String email, String phone, Boolean verified_email, String password, String password_confirmation, Boolean send_email_welcome) {
+//        this.first_name = first_name;
+//        this.last_name = last_name;
+//        this.email = email;
+//        this.phone = phone;
+//        this.verified_email = verified_email;
+//        this.password = password;
+//        this.password_confirmation = password_confirmation;
+//        this.send_email_welcome = send_email_welcome;
+//    }
+
+//    public UserCreationRequest(String first_name, String last_name, String email, String phone, Boolean verified_email, List<Address> address, String password, String password_confirmation, Boolean send_email_welcome) {
+//        this.first_name = first_name;
+//        this.last_name = last_name;
+//        this.email = email;
+//        this.phone = phone;
+//        this.verified_email = verified_email;
+//        this.addresses = address;
+//        this.password = password;
+//        this.password_confirmation = password_confirmation;
+//        this.send_email_welcome = send_email_welcome;
+//    }
 
     public UserCreationRequest() {
     }
@@ -72,13 +85,6 @@ public class UserCreationRequest {
         this.verified_email = verified_email;
     }
 
-    public BasicDBList getAddress() {
-        return address;
-    }
-
-    public void setAddress(BasicDBList address) {
-        this.address = address;
-    }
 
     public String getPassword() {
         return password;
@@ -94,6 +100,14 @@ public class UserCreationRequest {
 
     public void setPassword_confirmation(String password_confirmation) {
         this.password_confirmation = password_confirmation;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 
     public Boolean getSend_email_welcome() {

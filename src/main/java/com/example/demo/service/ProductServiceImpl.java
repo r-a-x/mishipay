@@ -50,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse productResponse = shopifyRestTempalte.getForObject(targetUrl,ProductResponse.class);
         return productResponse.getProducts();
 
-
     }
 
 }

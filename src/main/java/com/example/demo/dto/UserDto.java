@@ -13,6 +13,8 @@ public class UserDto implements Serializable {
 
     private Date createdOn;
 
+    private String accessToken;
+
     public UserDto() {
 
     }
@@ -22,6 +24,13 @@ public class UserDto implements Serializable {
         this.email = email;
         this.name = name;
         this.createdOn = createdOn;
+    }
+
+    public UserDto(String id, String email, String firstName, Date createdOn, String accessToken) {
+        this.id=id;
+        this.email=email;
+        this.name = firstName;
+        this.accessToken=accessToken;
     }
 
     public String getId() {
